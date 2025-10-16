@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Web Search Agent | Powered by Groq</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>AI Search Agent</h1>
+                    <p class="subtitle">Powered by <span class="gradient-text">Groq AI</span> & Real-time Web Search</p>
+                </div>
+            </div>
+            <div class="status-badge" id="statusBadge">
+                <div class="status-dot"></div>
+                <span>Ready</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Search Section -->
+            <section class="search-section" id="searchSection">
+                <div class="search-container">
+                    <div class="search-header">
+                        <h2>What would you like to know?</h2>
+                        <p>Ask anything and get AI-powered insights from across the web</p>
+                    </div>
+                    
+                    <form class="search-form" id="searchForm">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input 
+                                type="text" 
+                                class="search-input" 
+                                id="searchInput" 
+                                placeholder="e.g., What are the latest AI developments in 2025?"
+                                autocomplete="off"
+                                required
+                            >
+                            <button type="submit" class="search-button" id="searchButton">
+                                <span class="button-text">Search</span>
+                                <i class="fas fa-arrow-right button-icon"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Example Queries -->
+                    <div class="example-queries">
+                        <span class="example-label">Try:</span>
+                        <button class="example-chip" data-query="What are the latest developments in quantum computing?">
+                            <i class="fas fa-atom"></i> Quantum Computing
+                        </button>
+                        <button class="example-chip" data-query="How does blockchain technology work?">
+                            <i class="fas fa-link"></i> Blockchain
+                        </button>
+                        <button class="example-chip" data-query="Best practices for machine learning in 2025">
+                            <i class="fas fa-brain"></i> ML Best Practices
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <section class="loading-section hidden" id="loadingSection">
+                <div class="loading-container">
+                    <div class="loading-spinner">
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                    </div>
+                    <h3 class="loading-title">Searching the web...</h3>
+                    <p class="loading-text" id="loadingText">Fetching search results</p>
+                    <div class="loading-steps">
+                        <div class="step active" id="step1">
+                            <i class="fas fa-search"></i>
+                            <span>Searching</span>
+                        </div>
+                        <div class="step" id="step2">
+                            <i class="fas fa-filter"></i>
+                            <span>Filtering</span>
+                        </div>
+                        <div class="step" id="step3">
+                            <i class="fas fa-magic"></i>
+                            <span>Analyzing</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section hidden" id="resultsSection">
+                <div class="results-container">
+                    <!-- Query Display -->
+                    <div class="query-display">
+                        <button class="back-button" id="backButton">
+                            <i class="fas fa-arrow-left"></i>
+                            New Search
+                        </button>
+                        <div class="query-info">
+                            <h3>Search Results for:</h3>
+                            <p class="query-text" id="queryText"></p>
+                        </div>
+                    </div>
+
+                    <!-- AI Summary Card -->
+                    <div class="summary-card">
+                        <div class="card-header">
+                            <div class="header-left">
+                                <i class="fas fa-robot"></i>
+                                <h3>AI-Powered Summary</h3>
+                            </div>
+                            <div class="ai-badge">
+                                <i class="fas fa-sparkles"></i>
+                                <span>Groq AI</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="summary-text" id="summaryText"></div>
+                        </div>
+                    </div>
+
+                    <!-- Sources Section -->
+                    <div class="sources-section">
+                        <div class="sources-header">
+                            <i class="fas fa-link"></i>
+                            <h3>Sources</h3>
+                            <span class="sources-count" id="sourcesCount">0 sources</span>
+                        </div>
+                        <div class="sources-grid" id="sourcesGrid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error Section -->
+            <section class="error-section hidden" id="errorSection">
+                <div class="error-container">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Oops! Something went wrong</h3>
+                    <p class="error-message" id="errorMessage"></p>
+                    <button class="retry-button" id="retryButton">
+                        <i class="fas fa-redo"></i>
+                        Try Again
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>Built with <i class="fas fa-heart"></i> using <strong>Groq AI</strong> & <strong>Serper.dev</strong></p>
+                <div class="footer-links">
+                    <a href="https://groq.com" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Groq
+                    </a>
+                    <a href="https://serper.dev" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Serper
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <i class="fas fa-info-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
